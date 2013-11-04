@@ -8,9 +8,9 @@ class PopArtFilter {
   OpenCV opencv;
 
   Rectangle face;
-  boolean isFaceRectVisable = true;
+  boolean isFaceRectVisable = false;
 
-  PopArtFilter(PImage img, PApplet sketch) {
+  PopArtFilter(PApplet sketch, PImage img) {
     this.img = img;
     this.sketch = sketch;
     opencv = new OpenCV(this.sketch, this.img);
@@ -160,6 +160,63 @@ class PopArtFilter {
     println("resized img : " + img.width + "," + img.height);
     println("resized face : " + face.x + "," + face.y + "," + face.width + "," + face.height);
 
+    opencv = new OpenCV(sketch, img);
+    
+    
+    println(opencv.width + "," + opencv.height); 
+    
     return true;
+  }
+  
+  void blur(int blurSize) {
+    opencv.useColor();
+    opencv.blur(blurSize);
+    img = opencv.getOutput();
+  }
+  
+  void canny(int lowThreshold, int highThreshold) {
+    opencv.findCannyEdges(lowThreshold, highThreshold);
+    img = opencv.getSnapshot();
+  }
+  
+  void dilate(int count) {
+    for(int i = 0; i < count; i++) {
+      opencv.dilate();
+    }
+    img = opencv.getSnapshot();
+  }
+  
+  void erode(int count) {
+    for(int i = 0; i < count; i++) {
+      opencv.erode();
+    }
+    img = opencv.getSnapshot();
+  }
+  
+  void threshold(int thresdold) {
+    opencv.threshold(thresdold);
+    img = opencv.getSnapshot();
+  }
+  
+  void adaptiveThreshold(int blockSize, int c) {
+    opencv.adaptiveThreshold(blockSize, c);
+    img = opencv.getSnapshot();
+  }
+  
+  void invert() {
+    opencv.invert();
+    img = opencv.getSnapshot();
+  }
+  
+  void update() {
+//    img = opencv.getSnapshot();
+  }
+  
+  void useColor() {
+    opencv.useColor();
+  }
+  
+  void useGray() {
+    opencv.useGray();
   }
 }
